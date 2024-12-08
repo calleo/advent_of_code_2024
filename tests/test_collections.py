@@ -39,7 +39,7 @@ class TestMatrix:
     def test_at(self, matrix: Matrix):
         assert matrix.at(y=0, x=0).value == "g"
         assert matrix.at(y=2, x=2).value == "c"
-        assert matrix.at(y=100, x=100) is None
+        assert matrix.at(y=100, x=100).value == ""
 
     def test_iter(self, matrix: Matrix):
         points = [point.value for point in matrix.each_point()]
