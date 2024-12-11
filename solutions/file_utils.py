@@ -24,4 +24,4 @@ def read_input(day: str, input_type: InputType) -> list[str]:
 
 def read_matrix(day: str, input_type: InputType) -> Matrix:
     lines = read_input(day=day, input_type=input_type)
-    return Matrix(matrix=[list(line) for line in lines])
+    return Matrix(matrix=[list(line) for line in lines if len(line) > 0])

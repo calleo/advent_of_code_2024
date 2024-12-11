@@ -7,6 +7,12 @@ class Point(BaseModel):
     y: int
     value: str
 
+    def __hash__(self):
+        return hash((self.x, self.y))
+
+    def directional_repr(self, direction: str) -> str:
+        return f"x:{self.x}|y:{self.y}|d:{direction}"
+
 
 class Matrix(BaseModel):
     matrix: list[list[str]]
@@ -14,11 +20,24 @@ class Matrix(BaseModel):
     def at(self, x: int, y: int) -> Optional[Point]:
         try:
             _y = self.height() - y - 1
-            if _y < 0:
+            if _y < 0 or x < 0:
                 raise IndexError
             return Point(x=x, y=y, value=self.matrix[_y][x])
         except IndexError:
             return Point(x=x, y=y, value="")
+
+    def set(self, x: int, y: int, value: str) -> Optional[Point]:
+        _y = self.height() - y - 1
+
+        if _y < 0 or x < 0:
+            raise IndexError
+
+        self.matrix[_y][x] = value
+
+        return Point(x=x, y=y, value=self.matrix[_y][x])
+
+    def size(self) -> int:
+        return self.height() * self.width()
 
     def each_point(self) -> Generator[Point, None, None]:
         _matrix = self._copy()
@@ -49,6 +68,11 @@ class Matrix(BaseModel):
 
     def _copy(self) -> list[list[str]]:
         return [row[:] for row in self.matrix]
+
+    def print(self):
+        print("")
+        for row in self.matrix:
+            print(" ".join(row))
 
     def all_diagonals_as_str(self) -> list[str]:
         # Rotate the matrix 45 degrees to
